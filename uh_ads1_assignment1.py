@@ -32,7 +32,7 @@ def temp_sing_multiple_linesPlot(data):
     # Show the plot
     plt.show()
     #saving 
-    plt.savefig('time_char.png')
+    plt.savefig('temp_sing_multiple_linesPlot.png')
     
 
 
