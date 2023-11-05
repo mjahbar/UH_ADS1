@@ -33,7 +33,7 @@ def temp_sing_multiple_linesPlot(data):
     plt.savefig('TempSingaporeMultipleLinesPlot.png')
 
 
-def Rainfall_AvarageTemperature(data):
+def rainfall_AvarageTemperature(data):
     # Group by Month
     groupedByMonth = data.groupby(data['date'].dt.month)
     resultByMonth = groupedByMonth[['mean_temperature', 'daily_rainfall_total']].mean()
@@ -83,6 +83,30 @@ def Rainfall_AvarageTemperature(data):
     plt.savefig('RainfallwithAvarageTemperature_Plot.png')
 
 
+def distributionOfRainyDays(data):
+    
+    # Calculate Rainy and non Rainy days
+    non_rainy_days = len(data[data['daily_rainfall_total']==0])
+    rainy_days = len(data[data['daily_rainfall_total']>0])
+
+    # Create a pie chart
+    labels = ['Rainy Days', 'Non-Rainy Days']
+    sizes = [rainy_days, non_rainy_days]
+    colors = ['blue', 'lightgrey']
+    # Explode the first slice (Rainy Days)
+    explode = (0.1, 0)  
+
+    # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.axis('equal')  
+
+    plt.title('Distribution of Rainy Days')
+
+    # Show the pie chart
+    plt.show()
+
+    # saving the plot to disk
+    plt.savefig('distributionOfRainyDays.png')
 
 
 def main():
@@ -103,11 +127,14 @@ def main():
     dfOrg['max_wind_speed'] = pd.to_numeric(dfOrg['max_wind_speed'])
     dfOrg['daily_rainfall_total'] = pd.to_numeric(dfOrg['daily_rainfall_total'])
 
-    # calling time_chart function
+    # calling temp_sing_multiple_linesPlot function
     temp_sing_multiple_linesPlot(dfOrg)
 
-    # calling Rainfall_AvarageTemperature function
-    Rainfall_AvarageTemperature(dfOrg)
+    # calling rainfall_AvarageTemperature function
+    rainfall_AvarageTemperature(dfOrg)
+    
+    # calling distributionOfRainyDays function
+    distributionOfRainyDays(dfOrg)
 
 if __name__ == "__main__":
     main()
