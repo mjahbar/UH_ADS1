@@ -74,9 +74,9 @@ def rainfall_AvarageTemperature(data):
 
     # Plot the first dataset (daily_rainfall_total) on the primary axis
     ax1.bar(resultByMonth['month'], resultByMonth['daily_rainfall_total'],
-            color='b', label='Daily Rainfall Total')
+            color='c', label='Precipitation')
     ax1.set_xlabel('Month')
-    ax1.set_ylabel('Daily Rainfall Total (mm)', color='b')
+    ax1.set_ylabel('Precipitation (mm)', color='b')
 
     # Set the x-axis labels to month names
     ax1.set_xticks(resultByMonth['month'])
@@ -88,7 +88,7 @@ def rainfall_AvarageTemperature(data):
     # Plot the second dataset (mean_temperature) on the secondary axis
     ax2.plot(resultByMonth['month'], resultByMonth['mean_temperature'],
              marker='o', linestyle='-', color='r', label='Mean Temperature')
-    ax2.set_ylabel('Mean Temperature ($^\circ$C)', color='r')
+    ax2.set_ylabel('Temperature ($^\circ$C)', color='r')
 
     # Adding a legend for both axes
     ax1.legend(loc='upper left')
@@ -107,7 +107,7 @@ def rainfall_AvarageTemperature(data):
 def distributionOfRainyDays(data):
     """distributionOfRainyDays function produce a pie chart.
 
-    The plot compare the temperature distribution.
+    The plot looks at the rainy day distribution.
     data: A dataframe contains rain fall.
     """
 
@@ -115,19 +115,40 @@ def distributionOfRainyDays(data):
     non_rainy_days = len(data[data['daily_rainfall_total'] == 0])
     rainy_days = len(data[data['daily_rainfall_total'] > 0])
 
+    # Calculate Rainy day by year
+    rainydayby_year = data[data['daily_rainfall_total'] > 0].groupby(
+        data['date'].dt.year).agg({'count'})
+    rainydayby_year_gp = rainydayby_year['date']
+    rainydayby_year_ungp = rainydayby_year_gp.apply(list).reset_index()
+
     # Create a pie chart
     labels = ['Rainy Days', 'Non-Rainy Days']
     sizes = [rainy_days, non_rainy_days]
     colors = ['blue', 'lightgrey']
     # Explode the first slice (Rainy Days)
     explode = (0.1, 0)
+    plt.figure(figsize=(10, 5))
 
+    plt.figure(1)
+    plt.subplot(121)
     # Equal aspect ratio ensures that pie is drawn as a circle.
     plt.pie(sizes, explode=explode, labels=labels, colors=colors,
             autopct='%1.1f%%', shadow=True, startangle=140)
     plt.axis('equal')
+    plt.title('Rainy Days between 2009 to 2017')
 
-    plt.title('Distribution of Rainy Days')
+    plt.figure(2)
+    plt.subplot(121)
+    labels_year = rainydayby_year_ungp['date']
+    sizes_year = rainydayby_year_ungp['count']
+    plt.pie(sizes_year, labels=labels_year, autopct='%1.1f%%',
+            startangle=140, textprops={'fontsize': 8})
+    # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.axis('equal')
+    plt.title('Yearly Rainfall Distribution')
+
+    # Ensures the two pie charts don't overlap
+    plt.tight_layout()
 
     # Show the pie chart
     plt.show()
@@ -139,9 +160,9 @@ def distributionOfRainyDays(data):
 def main():
     """Main function is the entry point for the application.
 
-   data taken from https://beta.data.gov.sg/collections/1381/view.
-   preforming data pre-processing before passing into functions
-   """
+    data taken from https://beta.data.gov.sg/collections/1381/view.
+    preforming data pre-processing before passing into functions
+    """
     # reading data from site
     dfOrg = pd.read_csv("HistoricalDailyWeatherRecords.csv")
 
