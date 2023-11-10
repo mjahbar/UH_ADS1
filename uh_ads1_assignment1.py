@@ -95,7 +95,7 @@ def rainfall_AvarageTemperature(data):
     ax2.legend(loc='upper right')
 
     # Title for the entire plot
-    plt.title('Rainfall with Avarage Temperature')
+    plt.title('Rainfall with Average Temperature (2009-2017)')
 
     # Show the combined plot
     plt.show()
@@ -124,10 +124,10 @@ def distributionOfRainyDays(data):
     # Create a pie chart
     labels = ['Rainy Days', 'Non-Rainy Days']
     sizes = [rainy_days, non_rainy_days]
-    colors = ['blue', 'lightgrey']
+    colors = ['skyblue', 'lightgrey']
     # Explode the first slice (Rainy Days)
     explode = (0.1, 0)
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(10, 3))
 
     plt.figure(1)
     plt.subplot(121)
@@ -145,7 +145,8 @@ def distributionOfRainyDays(data):
             startangle=140, textprops={'fontsize': 8})
     # Equal aspect ratio ensures that pie is drawn as a circle.
     plt.axis('equal')
-    plt.title('Yearly Rainfall Distribution')
+    plt.title('Yearly Rainfall Distribution',
+              fontdict={"fontsize": 12})
 
     # Ensures the two pie charts don't overlap
     plt.tight_layout()
